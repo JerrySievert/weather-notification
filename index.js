@@ -26,7 +26,7 @@ function getCurrentStatus () {
 
     var p = new push( {
       user: config.pushoverUser,
-      token: config.pushoverToken,
+      token: config.pushoverToken
     });
 
     var msg = {
@@ -52,6 +52,8 @@ getCurrentStatus();
   is found, minutesUntilChange may be calculated as follows: 
   (datapoint.time - currently.time) / 60.
  */
+var precipIntensity;
+
 function getNextUpdate () {
   request("https://api.forecast.io/forecast/" + config.apiKey + "/" + config.lat + "," + config.lon, function (err, response, body) {
     var forecast;
@@ -61,13 +63,17 @@ function getNextUpdate () {
       console.log("Dark Sky Error: " + err);
     }
 
+    if (precipIntensity === undefined) {
+      precipIntensity = forecast.currently.precipIntensity;
+    }
+
     // default to 10 minutes at the most to check
     var minutesUntilChange = 10,
         i, done = false;
 
     // minutely
     for (i = 0; i < forecast.minutely.data.length && !done; i++) {
-      if (forecast.minutely.data[i].precipIntensity !== 0) {
+      if ((forecast.minutely.data[i].precipIntensity !== 0) !== (forecast.currently.precipIntensity !== 0)) {
         minutesUntilChange = (forecast.minutely.data[i].time - forecast.currently.time) / 60;
         done = true;
       }
@@ -84,3 +90,5 @@ function getNextUpdate () {
     console.log(minutesUntilChange);
   });
 }
+
+getNextUpdate();
