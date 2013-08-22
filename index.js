@@ -87,6 +87,7 @@ function getNextUpdate () {
       }
     }
 
+    setTimeout(getNextUpdate, minutesUntilChange * 60000);
     console.log(minutesUntilChange);
   });
 }
