@@ -44,6 +44,18 @@ function getCurrentStatus () {
 
 getCurrentStatus();
 
+var precipIntensity;
+var precipType;
+
+/*
+  Precipitation Breakdown:
+
+  0 - no precipitation
+  0.002 - very light
+  0.017 - light
+  0.1 - moderate
+  0.4 - heavy
+*/
 
 /*
   In v2, iterate over minutely.data and hourly.data in order, 
@@ -52,8 +64,6 @@ getCurrentStatus();
   is found, minutesUntilChange may be calculated as follows: 
   (datapoint.time - currently.time) / 60.
  */
-var precipIntensity;
-
 function getNextUpdate () {
   request("https://api.forecast.io/forecast/" + config.apiKey + "/" + config.lat + "," + config.lon, function (err, response, body) {
     var forecast;
