@@ -57,6 +57,11 @@ var precipType;
   0.4 - heavy
 */
 
+var very_light = 0.002,
+    light      = 0.017,
+    moderate   = 0.1,
+    heavy      = 0.4;
+
 /*
   In v2, iterate over minutely.data and hourly.data in order, 
   finding the first data point for which currently.precipIntensity !== 0
@@ -76,6 +81,9 @@ function getNextUpdate () {
     if (precipIntensity === undefined) {
       precipIntensity = forecast.currently.precipIntensity;
     }
+
+    // changes often
+    precipType = forecast.currently.precipType;
 
     // default to 10 minutes at the most to check
     var minutesUntilChange = 10,
